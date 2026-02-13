@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_ddaa28c9a8999442d76147f46d7b365d {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css"/>
+</head>
+<body>
+    
+    
+    <div style="
+        position: fixed;
+        bottom: 50px;
+        right: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    ">
+        <b style="color: #333;">Легенда:</b><br>
+        <span style="color: green;">🟢</span> Старт<br>
+        <span style="color: blue;">🔵</span> Промежуточная точка<br>
+        <span style="color: red;">🔴</span> Финиш
+    </div>
+    
+    
+    <div style="
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+    ">
+        <b style="color: #667eea;">🚚 Route Planner</b><br>
+        <b>Маршрут:</b> test_addresses.csv<br>
+        <b>Точек:</b> 5<br>
+        <b>Дистанция:</b> 13.29 км
+    </div>
+    
+    
+            <div class="folium-map" id="map_ddaa28c9a8999442d76147f46d7b365d" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_ddaa28c9a8999442d76147f46d7b365d = L.map(
+                "map_ddaa28c9a8999442d76147f46d7b365d",
+                {
+                    center: [55.7706, 37.611380000000004],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 13,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+
+            
+
+        
+    
+            var tile_layer_3db193de3b46b4a019a055f3cd1022bc = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_3db193de3b46b4a019a055f3cd1022bc.addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var poly_line_5e10124241d49f5ed4a9950dbb94356b = L.polyline(
+                [[55.7539, 37.6208], [55.7558, 37.6173], [55.7652, 37.601], [55.7498, 37.581], [55.8283, 37.6368]],
+                {"bubblingMouseEvents": true, "color": "#667eea", "dashArray": "5, 10", "dashOffset": null, "fill": false, "fillColor": "#667eea", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+        var popup_e9cfd2f441dcd12e62125f603955b599 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_7930b108e86f86f77bc997beddb0068b = $(`<div id="html_7930b108e86f86f77bc997beddb0068b" style="width: 100.0%; height: 100.0%;">Маршрут: test_addresses.csv<br>Точек: 5</div>`)[0];
+                popup_e9cfd2f441dcd12e62125f603955b599.setContent(html_7930b108e86f86f77bc997beddb0068b);
+            
+        
+
+        poly_line_5e10124241d49f5ed4a9950dbb94356b.bindPopup(popup_e9cfd2f441dcd12e62125f603955b599)
+        ;
+
+        
+    
+    
+            var poly_line_503aa2170cc555070f3f554fd9ba18ef = L.polyline(
+                [[55.7539, 37.6208], [55.7558, 37.6173]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            poly_line_503aa2170cc555070f3f554fd9ba18ef.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var poly_line_4609fa918ac57ebe8a3026480f0c3e16 = L.polyline(
+                [[55.7558, 37.6173], [55.7652, 37.601]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            poly_line_4609fa918ac57ebe8a3026480f0c3e16.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var poly_line_9608e6a5264a9f28fac51bf5d5e94c28 = L.polyline(
+                [[55.7652, 37.601], [55.7498, 37.581]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            poly_line_9608e6a5264a9f28fac51bf5d5e94c28.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var poly_line_441f345cb632ac2578cb07408e741207 = L.polyline(
+                [[55.7498, 37.581], [55.8283, 37.6368]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            poly_line_441f345cb632ac2578cb07408e741207.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var marker_ad1985710cb33ee359ef633c1c920bd7 = L.marker(
+                [55.7539, 37.6208],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var icon_5b559235bd964e8e7de67fa48336b414 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "play", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
+            );
+            marker_ad1985710cb33ee359ef633c1c920bd7.setIcon(icon_5b559235bd964e8e7de67fa48336b414);
+        
+    
+        var popup_97bdd42ee3ecc12ceabe93ef190e56ee = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_1ebcbdd5468d13875903ef5b5d27d256 = $(`<div id="html_1ebcbdd5468d13875903ef5b5d27d256" style="width: 100.0%; height: 100.0%;"><b>🏁 СТАРТ</b><br>Москва, Красная площадь<br><small>Позиция: 1</small></div>`)[0];
+                popup_97bdd42ee3ecc12ceabe93ef190e56ee.setContent(html_1ebcbdd5468d13875903ef5b5d27d256);
+            
+        
+
+        marker_ad1985710cb33ee359ef633c1c920bd7.bindPopup(popup_97bdd42ee3ecc12ceabe93ef190e56ee)
+        ;
+
+        
+    
+    
+            marker_ad1985710cb33ee359ef633c1c920bd7.bindTooltip(
+                `<div>
+                     1. Москва, Красная площадь
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_7fea57e93831313f07a50b658727a9f5 = L.marker(
+                [55.7539, 37.6208],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var div_icon_916d978ca5ae878e295fbb011a9ecaf1 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e1\u003c/div\u003e"});
+            marker_7fea57e93831313f07a50b658727a9f5.setIcon(div_icon_916d978ca5ae878e295fbb011a9ecaf1);
+        
+    
+            var marker_3c85342d9a36a6e8c50de79d96de9032 = L.marker(
+                [55.7558, 37.6173],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var icon_8d74caae5153e102536c5b23438fdfa1 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "map-marker", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_3c85342d9a36a6e8c50de79d96de9032.setIcon(icon_8d74caae5153e102536c5b23438fdfa1);
+        
+    
+        var popup_b66d4775801f0bb1d3b649026963f9cb = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_759682d61acd77824b8e5a22031ddf24 = $(`<div id="html_759682d61acd77824b8e5a22031ddf24" style="width: 100.0%; height: 100.0%;"><b>📍 Точка 2</b><br>Москва, ул. Ленина, 1</div>`)[0];
+                popup_b66d4775801f0bb1d3b649026963f9cb.setContent(html_759682d61acd77824b8e5a22031ddf24);
+            
+        
+
+        marker_3c85342d9a36a6e8c50de79d96de9032.bindPopup(popup_b66d4775801f0bb1d3b649026963f9cb)
+        ;
+
+        
+    
+    
+            marker_3c85342d9a36a6e8c50de79d96de9032.bindTooltip(
+                `<div>
+                     2. Москва, ул. Ленина, 1
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_e77c2ce8cbf5e244e8e6877ad2d153ce = L.marker(
+                [55.7558, 37.6173],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var div_icon_48b7afabd95fc8eeb74a4ff25e4f5e6b = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e2\u003c/div\u003e"});
+            marker_e77c2ce8cbf5e244e8e6877ad2d153ce.setIcon(div_icon_48b7afabd95fc8eeb74a4ff25e4f5e6b);
+        
+    
+            var marker_fef3301c77ced03e0af144efa9542905 = L.marker(
+                [55.7652, 37.601],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var icon_2803cc03378c75b4abc5796507af547e = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "map-marker", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_fef3301c77ced03e0af144efa9542905.setIcon(icon_2803cc03378c75b4abc5796507af547e);
+        
+    
+        var popup_addc7053bf6f8f3173556772101bc4ec = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_7fa94eb155ad36193464514fd4d8a888 = $(`<div id="html_7fa94eb155ad36193464514fd4d8a888" style="width: 100.0%; height: 100.0%;"><b>📍 Точка 3</b><br>Москва, Тверская ул., 13</div>`)[0];
+                popup_addc7053bf6f8f3173556772101bc4ec.setContent(html_7fa94eb155ad36193464514fd4d8a888);
+            
+        
+
+        marker_fef3301c77ced03e0af144efa9542905.bindPopup(popup_addc7053bf6f8f3173556772101bc4ec)
+        ;
+
+        
+    
+    
+            marker_fef3301c77ced03e0af144efa9542905.bindTooltip(
+                `<div>
+                     3. Москва, Тверская ул., 13
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_66840acb6444d611b5ff1cfa619755c1 = L.marker(
+                [55.7652, 37.601],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var div_icon_d40ff1459b9df832134ebb742b1f1115 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e3\u003c/div\u003e"});
+            marker_66840acb6444d611b5ff1cfa619755c1.setIcon(div_icon_d40ff1459b9df832134ebb742b1f1115);
+        
+    
+            var marker_ed46c1d33a969db4e8378a0ba5357032 = L.marker(
+                [55.7498, 37.581],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var icon_3366dab762237f78aeb55c23dd05f570 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "map-marker", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_ed46c1d33a969db4e8378a0ba5357032.setIcon(icon_3366dab762237f78aeb55c23dd05f570);
+        
+    
+        var popup_3677c765429156f8d4b903f46dfe111f = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_87343b61b4aa0e3b2b815ea51ee0e225 = $(`<div id="html_87343b61b4aa0e3b2b815ea51ee0e225" style="width: 100.0%; height: 100.0%;"><b>📍 Точка 4</b><br>Москва, Арбат</div>`)[0];
+                popup_3677c765429156f8d4b903f46dfe111f.setContent(html_87343b61b4aa0e3b2b815ea51ee0e225);
+            
+        
+
+        marker_ed46c1d33a969db4e8378a0ba5357032.bindPopup(popup_3677c765429156f8d4b903f46dfe111f)
+        ;
+
+        
+    
+    
+            marker_ed46c1d33a969db4e8378a0ba5357032.bindTooltip(
+                `<div>
+                     4. Москва, Арбат
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_56d5fca80c661bb327a05e8970fee68d = L.marker(
+                [55.7498, 37.581],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var div_icon_c05a5947433b1b4b47b10f742f6956a0 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e4\u003c/div\u003e"});
+            marker_56d5fca80c661bb327a05e8970fee68d.setIcon(div_icon_c05a5947433b1b4b47b10f742f6956a0);
+        
+    
+            var marker_b73954d8e5956094c4f400f9a1b7097d = L.marker(
+                [55.8283, 37.6368],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var icon_8a7a4466aa057f0f7a8a4eb36a86325d = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "flag-checkered", "iconColor": "white", "markerColor": "red", "prefix": "fa"}
+            );
+            marker_b73954d8e5956094c4f400f9a1b7097d.setIcon(icon_8a7a4466aa057f0f7a8a4eb36a86325d);
+        
+    
+        var popup_5821738334a36689e1e098490e409e10 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_2ac07ada658d718bb0e45271f1271c15 = $(`<div id="html_2ac07ada658d718bb0e45271f1271c15" style="width: 100.0%; height: 100.0%;"><b>🏁 ФИНИШ</b><br>Москва, ВДНХ<br><small>Позиция: 5</small></div>`)[0];
+                popup_5821738334a36689e1e098490e409e10.setContent(html_2ac07ada658d718bb0e45271f1271c15);
+            
+        
+
+        marker_b73954d8e5956094c4f400f9a1b7097d.bindPopup(popup_5821738334a36689e1e098490e409e10)
+        ;
+
+        
+    
+    
+            marker_b73954d8e5956094c4f400f9a1b7097d.bindTooltip(
+                `<div>
+                     5. Москва, ВДНХ
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_234bd2211fa13690091d0ba94e2104eb = L.marker(
+                [55.8283, 37.6368],
+                {}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+    
+            var div_icon_5f097d2c1aa9ef8677f6515bb6de499b = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e5\u003c/div\u003e"});
+            marker_234bd2211fa13690091d0ba94e2104eb.setIcon(div_icon_5f097d2c1aa9ef8677f6515bb6de499b);
+        
+    
+                var lat_lng_popup_1578e1f10b0c8463feacea271d572325 = L.popup();
+                function latLngPop(e) {
+                    lat_lng_popup_1578e1f10b0c8463feacea271d572325
+                        .setLatLng(e.latlng)
+                        .setContent("Latitude: " + e.latlng.lat.toFixed(4) +
+                                    "<br>Longitude: " + e.latlng.lng.toFixed(4))
+                        .openOn(map_ddaa28c9a8999442d76147f46d7b365d);
+                    }
+                map_ddaa28c9a8999442d76147f46d7b365d.on('click', latLngPop);
+            
+    
+            L.control.fullscreen(
+                {"forceSeparateButton": true, "position": "topright", "title": "\u041f\u043e\u043b\u043d\u044b\u0439 \u044d\u043a\u0440\u0430\u043d", "titleCancel": "\u0417\u0430\u043a\u0440\u044b\u0442\u044c"}
+            ).addTo(map_ddaa28c9a8999442d76147f46d7b365d);
+        
+</script>
+</html>

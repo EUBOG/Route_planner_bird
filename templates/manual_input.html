@@ -1,0 +1,301 @@
+{% extends "layout.html" %}
+
+{% block title %}Ручной ввод точек{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h2>📝 Ручной ввод точек маршрута</h2>
+        <a href="{{ url_for('index') }}"
+           style="background: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+           📤 Загрузить CSV
+        </a>
+    </div>
+
+    <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 20px;">
+
+        <form method="POST" action="{{ url_for('manual_submit') }}" id="manualForm">
+
+            <div id="waypointsContainer">
+                <!-- Точка 1 -->
+                <div class="waypoint-box" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="margin: 0; color: #667eea;">📍 Точка 1</h4>
+                        <span class="point-number" style="background: #667eea; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em;">1</span>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label for="address_1" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                            Адрес:
+                        </label>
+                        <input
+                            type="text"
+                            id="address_1"
+                            name="address[]"
+                            class="address-input"
+                            placeholder="Например: ул. Ленина, 1"
+                            required
+                            style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                        >
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label for="latitude_1" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                                Широта (Latitude):
+                            </label>
+                            <input
+                                type="number"
+                                id="latitude_1"
+                                name="latitude[]"
+                                class="latitude-input"
+                                step="0.000001"
+                                placeholder="55.7558"
+                                required
+                                style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                            >
+                        </div>
+                        <div>
+                            <label for="longitude_1" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                                Долгота (Longitude):
+                            </label>
+                            <input
+                                type="number"
+                                id="longitude_1"
+                                name="longitude[]"
+                                class="longitude-input"
+                                step="0.000001"
+                                placeholder="37.6173"
+                                required
+                                style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                            >
+                        </div>
+                    </div>
+
+                    <div style="background: #e7f3ff; padding: 10px; border-radius: 5px; font-size: 0.9em; color: #0066cc;">
+                        <strong>ℹ️ Подсказка:</strong> Широта от -90 до 90, Долгота от -180 до 180
+                    </div>
+                </div>
+
+                <!-- Точка 2 -->
+                <div class="waypoint-box" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #28a745;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="margin: 0; color: #28a745;">📍 Точка 2</h4>
+                        <span class="point-number" style="background: #28a745; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em;">2</span>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label for="address_2" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                            Адрес:
+                        </label>
+                        <input
+                            type="text"
+                            id="address_2"
+                            name="address[]"
+                            class="address-input"
+                            placeholder="Например: Тверская ул., 13"
+                            required
+                            style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                        >
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label for="latitude_2" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                                Широта (Latitude):
+                            </label>
+                            <input
+                                type="number"
+                                id="latitude_2"
+                                name="latitude[]"
+                                class="latitude-input"
+                                step="0.000001"
+                                placeholder="55.7652"
+                                required
+                                style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                            >
+                        </div>
+                        <div>
+                            <label for="longitude_2" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                                Долгота (Longitude):
+                            </label>
+                            <input
+                                type="number"
+                                id="longitude_2"
+                                name="longitude[]"
+                                class="longitude-input"
+                                step="0.000001"
+                                placeholder="37.6010"
+                                required
+                                style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                            >
+                        </div>
+                    </div>
+
+                    <div style="background: #e7f3ff; padding: 10px; border-radius: 5px; font-size: 0.9em; color: #0066cc;">
+                        <strong>ℹ️ Подсказка:</strong> Широта от -90 до 90, Долгота от -180 до 180
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка добавления новой точки -->
+            <div style="text-align: center; margin: 20px 0;">
+                <button
+                    type="button"
+                    id="addWaypointBtn"
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                           color: white;
+                           padding: 12px 30px;
+                           border: none;
+                           border-radius: 8px;
+                           font-size: 1em;
+                           cursor: pointer;
+                           transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.05)'"
+                    onmouseout="this.style.transform='scale(1)'"
+                >
+                    ➕ Добавить точку
+                </button>
+            </div>
+
+            <!-- Кнопка отправки -->
+            <div style="text-align: center;">
+                <button
+                    type="submit"
+                    style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                           color: white;
+                           padding: 15px 40px;
+                           border: none;
+                           border-radius: 8px;
+                           font-size: 1.1em;
+                           cursor: pointer;
+                           transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.05)'"
+                    onmouseout="this.style.transform='scale(1)'"
+                >
+                    🚀 Рассчитать маршрут
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px;">
+        <h4 style="color: #667eea; margin-bottom: 15px;">ℹ️ Как найти координаты?</h4>
+        <ol style="padding-left: 20px; color: #555; line-height: 1.8;">
+            <li>Откройте <a href="https://www.google.com/maps" target="_blank" style="color: #667eea; text-decoration: underline;">Google Maps</a></li>
+            <li>Найдите нужный адрес на карте</li>
+            <li>Кликните правой кнопкой мыши по месту</li>
+            <li>Скопируйте координаты из всплывающего окна (формат: 55.7558, 37.6173)</li>
+            <li>Первое число — широта (Latitude), второе — долгота (Longitude)</li>
+        </ol>
+
+        <div style="margin-top: 15px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px;">
+            <strong>⚠️ Важно:</strong> Минимум 2 точки для построения маршрута. Максимум — сколько угодно!
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let waypointCount = 2; // Уже есть 2 точки
+
+        // Цвета для новых точек
+        const colors = ['#ffc107', '#fd7e14', '#dc3545', '#6f42c1', '#e83e8c', '#17a2b8', '#667eea', '#28a745'];
+
+        document.getElementById('addWaypointBtn').addEventListener('click', function() {
+            waypointCount++;
+
+            const container = document.getElementById('waypointsContainer');
+            const colorIndex = (waypointCount - 3) % colors.length;
+            const color = colors[colorIndex];
+
+            const newWaypoint = document.createElement('div');
+            newWaypoint.className = 'waypoint-box';
+            newWaypoint.style.cssText = `background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid ${color};`;
+
+            newWaypoint.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h4 style="margin: 0; color: ${color};">📍 Точка ${waypointCount}</h4>
+                    <span class="point-number" style="background: ${color}; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em;">${waypointCount}</span>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="address_${waypointCount}" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                        Адрес:
+                    </label>
+                    <input
+                        type="text"
+                        id="address_${waypointCount}"
+                        name="address[]"
+                        class="address-input"
+                        placeholder="Введите адрес"
+                        required
+                        style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                    >
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label for="latitude_${waypointCount}" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                            Широта (Latitude):
+                        </label>
+                        <input
+                            type="number"
+                            id="latitude_${waypointCount}"
+                            name="latitude[]"
+                            class="latitude-input"
+                            step="0.000001"
+                            placeholder="55.7558"
+                            required
+                            style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                        >
+                    </div>
+                    <div>
+                        <label for="longitude_${waypointCount}" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                            Долгота (Longitude):
+                        </label>
+                        <input
+                            type="number"
+                            id="longitude_${waypointCount}"
+                            name="longitude[]"
+                            class="longitude-input"
+                            step="0.000001"
+                            placeholder="37.6173"
+                            required
+                            style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1em;"
+                        >
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <button
+                        type="button"
+                        class="remove-btn"
+                        style="background: #dc3545; color: white; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em;"
+                    >
+                        🗑️ Удалить
+                    </button>
+                </div>
+
+                <div style="background: #e7f3ff; padding: 10px; border-radius: 5px; font-size: 0.9em; color: #0066cc; margin-top: 10px;">
+                    <strong>ℹ️ Подсказка:</strong> Широта от -90 до 90, Долгота от -180 до 180
+                </div>
+            `;
+
+            container.appendChild(newWaypoint);
+
+            // Добавляем обработчик удаления
+            newWaypoint.querySelector('.remove-btn').addEventListener('click', function() {
+                if (document.querySelectorAll('.waypoint-box').length > 2) {
+                    newWaypoint.remove();
+                } else {
+                    alert('Нельзя удалить все точки! Минимум должно остаться 2 точки.');
+                }
+            });
+
+            // Прокручиваем к новой точке
+            newWaypoint.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+</script>
+{% endblock %}

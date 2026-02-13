@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_4ceb9dd0510b695a697493d8f396cbcf {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css"/>
+</head>
+<body>
+    
+    
+    <div style="
+        position: fixed;
+        bottom: 50px;
+        right: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    ">
+        <b style="color: #333;">Легенда:</b><br>
+        <span style="color: green;">🟢</span> Старт<br>
+        <span style="color: blue;">🔵</span> Промежуточная точка<br>
+        <span style="color: red;">🔴</span> Финиш
+    </div>
+    
+    
+    <div style="
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+    ">
+        <b style="color: #667eea;">🚚 Route Planner</b><br>
+        <b>Маршрут:</b> test_addresses2.csv<br>
+        <b>Точек:</b> 5<br>
+        <b>Дистанция:</b> 58.51 км
+    </div>
+    
+    
+            <div class="folium-map" id="map_4ceb9dd0510b695a697493d8f396cbcf" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_4ceb9dd0510b695a697493d8f396cbcf = L.map(
+                "map_4ceb9dd0510b695a697493d8f396cbcf",
+                {
+                    center: [54.275402199999995, 48.420151399999995],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 13,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+
+            
+
+        
+    
+            var tile_layer_40267d852f974a62d074485f4cb7c256 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_40267d852f974a62d074485f4cb7c256.addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var poly_line_d796279c651439388bd055e91a780669 = L.polyline(
+                [[54.320137, 48.380845], [54.312642, 48.399952], [54.255024, 48.334869], [54.10929, 48.394445], [54.379918, 48.590646]],
+                {"bubblingMouseEvents": true, "color": "#667eea", "dashArray": "5, 10", "dashOffset": null, "fill": false, "fillColor": "#667eea", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+        var popup_5a14ca3e271a9ce0322a9ebeb38f57d7 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b0a2f91f91c114e54e904cfd29a14862 = $(`<div id="html_b0a2f91f91c114e54e904cfd29a14862" style="width: 100.0%; height: 100.0%;">Маршрут: test_addresses2.csv<br>Точек: 5</div>`)[0];
+                popup_5a14ca3e271a9ce0322a9ebeb38f57d7.setContent(html_b0a2f91f91c114e54e904cfd29a14862);
+            
+        
+
+        poly_line_d796279c651439388bd055e91a780669.bindPopup(popup_5a14ca3e271a9ce0322a9ebeb38f57d7)
+        ;
+
+        
+    
+    
+            var poly_line_feec0d76b30d05db8d3d47ad045893a7 = L.polyline(
+                [[54.320137, 48.380845], [54.312642, 48.399952]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            poly_line_feec0d76b30d05db8d3d47ad045893a7.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var poly_line_c2fb84379b3349619adb920aab7d0b13 = L.polyline(
+                [[54.312642, 48.399952], [54.255024, 48.334869]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            poly_line_c2fb84379b3349619adb920aab7d0b13.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var poly_line_7261c6b126861415d11ce3aeaf89836f = L.polyline(
+                [[54.255024, 48.334869], [54.10929, 48.394445]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            poly_line_7261c6b126861415d11ce3aeaf89836f.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var poly_line_2f83f049a20ec3f303dcaec263ddf25c = L.polyline(
+                [[54.10929, 48.394445], [54.379918, 48.590646]],
+                {"bubblingMouseEvents": true, "color": "transparent", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "transparent", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            poly_line_2f83f049a20ec3f303dcaec263ddf25c.setText(
+                "\u27a4",
+                {"attributes": {"fill": "#667eea", "font-size": "20px", "font-weight": "bold"}, "below": false, "center": false, "offset": 8, "orientation": 0, "repeat": false}
+            );
+        
+    
+            var marker_58d2bceaa747780c0640f53e1cd5bc22 = L.marker(
+                [54.320137, 48.380845],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var icon_1f514d66794a1c8df04e202e60656a1b = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "play", "iconColor": "white", "markerColor": "green", "prefix": "fa"}
+            );
+            marker_58d2bceaa747780c0640f53e1cd5bc22.setIcon(icon_1f514d66794a1c8df04e202e60656a1b);
+        
+    
+        var popup_3fad9a22f98c5f1efe36a0e9bb3fdf21 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_64d6926b3ccbcd51b38ee619b95550bb = $(`<div id="html_64d6926b3ccbcd51b38ee619b95550bb" style="width: 100.0%; height: 100.0%;"><b>🏁 СТАРТ</b><br>Ульяновск, Робеспьера 59<br><small>Позиция: 1</small></div>`)[0];
+                popup_3fad9a22f98c5f1efe36a0e9bb3fdf21.setContent(html_64d6926b3ccbcd51b38ee619b95550bb);
+            
+        
+
+        marker_58d2bceaa747780c0640f53e1cd5bc22.bindPopup(popup_3fad9a22f98c5f1efe36a0e9bb3fdf21)
+        ;
+
+        
+    
+    
+            marker_58d2bceaa747780c0640f53e1cd5bc22.bindTooltip(
+                `<div>
+                     1. Ульяновск, Робеспьера 59
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_435c8c9b9539b4c1edb91a73ad32f46e = L.marker(
+                [54.320137, 48.380845],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var div_icon_4252833794158c807cbe0da3e205c6e8 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e1\u003c/div\u003e"});
+            marker_435c8c9b9539b4c1edb91a73ad32f46e.setIcon(div_icon_4252833794158c807cbe0da3e205c6e8);
+        
+    
+            var marker_4a3e2c6edb8079ac99af3e4da5df7d7f = L.marker(
+                [54.312642, 48.399952],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var icon_77085b384cdf0ebd094fddbf88f1ac6b = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "map-marker", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_4a3e2c6edb8079ac99af3e4da5df7d7f.setIcon(icon_77085b384cdf0ebd094fddbf88f1ac6b);
+        
+    
+        var popup_6ba13274021b3fe4d5304527b97333a5 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_8b99c1a933076dd63a7d2c234d4f0dcf = $(`<div id="html_8b99c1a933076dd63a7d2c234d4f0dcf" style="width: 100.0%; height: 100.0%;"><b>📍 Точка 2</b><br>Ульяновск, Спасская, 3</div>`)[0];
+                popup_6ba13274021b3fe4d5304527b97333a5.setContent(html_8b99c1a933076dd63a7d2c234d4f0dcf);
+            
+        
+
+        marker_4a3e2c6edb8079ac99af3e4da5df7d7f.bindPopup(popup_6ba13274021b3fe4d5304527b97333a5)
+        ;
+
+        
+    
+    
+            marker_4a3e2c6edb8079ac99af3e4da5df7d7f.bindTooltip(
+                `<div>
+                     2. Ульяновск, Спасская, 3
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_fa1ff40f5feef0dfea5546090e819735 = L.marker(
+                [54.312642, 48.399952],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var div_icon_1184acb56d3ae81e8c46e58a960069d2 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e2\u003c/div\u003e"});
+            marker_fa1ff40f5feef0dfea5546090e819735.setIcon(div_icon_1184acb56d3ae81e8c46e58a960069d2);
+        
+    
+            var marker_94abe0dbd1545f831d44f888da664ece = L.marker(
+                [54.255024, 48.334869],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var icon_ed63a6a45836a0ba354c49f957205d55 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "map-marker", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_94abe0dbd1545f831d44f888da664ece.setIcon(icon_ed63a6a45836a0ba354c49f957205d55);
+        
+    
+        var popup_d889085aed615513ffe02dc1be423907 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_8a2d4c7e27336180c28ffeb5dae15292 = $(`<div id="html_8a2d4c7e27336180c28ffeb5dae15292" style="width: 100.0%; height: 100.0%;"><b>📍 Точка 3</b><br>Ульяновск, Хрустальная, 41/34</div>`)[0];
+                popup_d889085aed615513ffe02dc1be423907.setContent(html_8a2d4c7e27336180c28ffeb5dae15292);
+            
+        
+
+        marker_94abe0dbd1545f831d44f888da664ece.bindPopup(popup_d889085aed615513ffe02dc1be423907)
+        ;
+
+        
+    
+    
+            marker_94abe0dbd1545f831d44f888da664ece.bindTooltip(
+                `<div>
+                     3. Ульяновск, Хрустальная, 41/34
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_99671a076d11bf49795254b1812cf725 = L.marker(
+                [54.255024, 48.334869],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var div_icon_49236429d8161cc488ae1d207c8fb1be = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e3\u003c/div\u003e"});
+            marker_99671a076d11bf49795254b1812cf725.setIcon(div_icon_49236429d8161cc488ae1d207c8fb1be);
+        
+    
+            var marker_f41539a0bded40ad1c48c2f79c3421a4 = L.marker(
+                [54.10929, 48.394445],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var icon_b7cb2c3b2fda4f542451344c03c586c0 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "map-marker", "iconColor": "white", "markerColor": "blue", "prefix": "fa"}
+            );
+            marker_f41539a0bded40ad1c48c2f79c3421a4.setIcon(icon_b7cb2c3b2fda4f542451344c03c586c0);
+        
+    
+        var popup_ce2076b430d8d283d7f7408a0cd50206 = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_04015abc2c2e541ee6cb9633be8000c1 = $(`<div id="html_04015abc2c2e541ee6cb9633be8000c1" style="width: 100.0%; height: 100.0%;"><b>📍 Точка 4</b><br>Новоульяновск, Липки, Лесная, 16</div>`)[0];
+                popup_ce2076b430d8d283d7f7408a0cd50206.setContent(html_04015abc2c2e541ee6cb9633be8000c1);
+            
+        
+
+        marker_f41539a0bded40ad1c48c2f79c3421a4.bindPopup(popup_ce2076b430d8d283d7f7408a0cd50206)
+        ;
+
+        
+    
+    
+            marker_f41539a0bded40ad1c48c2f79c3421a4.bindTooltip(
+                `<div>
+                     4. Новоульяновск, Липки, Лесная, 16
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_29e6eb9a52a8a796d1d7051ed2024acf = L.marker(
+                [54.10929, 48.394445],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var div_icon_ee78850a7fe7a5e84caed14b10dac828 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e4\u003c/div\u003e"});
+            marker_29e6eb9a52a8a796d1d7051ed2024acf.setIcon(div_icon_ee78850a7fe7a5e84caed14b10dac828);
+        
+    
+            var marker_b9f8a4245885a9d338d5f8ea3d7ac544 = L.marker(
+                [54.379918, 48.590646],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var icon_1f64401d84890562bfb56861d6152e61 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "flag-checkered", "iconColor": "white", "markerColor": "red", "prefix": "fa"}
+            );
+            marker_b9f8a4245885a9d338d5f8ea3d7ac544.setIcon(icon_1f64401d84890562bfb56861d6152e61);
+        
+    
+        var popup_431f702c8f9dcf670ba2936eea327b9d = L.popup({"maxWidth": 300});
+
+        
+            
+                var html_e7d2b4c5e66bc310ee5c2d7f16b6115c = $(`<div id="html_e7d2b4c5e66bc310ee5c2d7f16b6115c" style="width: 100.0%; height: 100.0%;"><b>🏁 ФИНИШ</b><br>Ульяновск, Генерала Тюленева, 14/16<br><small>Позиция: 5</small></div>`)[0];
+                popup_431f702c8f9dcf670ba2936eea327b9d.setContent(html_e7d2b4c5e66bc310ee5c2d7f16b6115c);
+            
+        
+
+        marker_b9f8a4245885a9d338d5f8ea3d7ac544.bindPopup(popup_431f702c8f9dcf670ba2936eea327b9d)
+        ;
+
+        
+    
+    
+            marker_b9f8a4245885a9d338d5f8ea3d7ac544.bindTooltip(
+                `<div>
+                     5. Ульяновск, Генерала Тюленева, 14/16
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_3e1bbf6f15d765753d4d1c0ecdb5e2b4 = L.marker(
+                [54.379918, 48.590646],
+                {}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+    
+            var div_icon_b7e0064f8e83a7daae70b0f109740191 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"\n                    font-weight: bold;\n                    font-size: 14px;\n                    color: white;\n                    background-color: #667eea;\n                    border-radius: 50%;\n                    width: 24px;\n                    height: 24px;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    margin-top: -28px;\n                    margin-left: 8px;\n                \"\u003e5\u003c/div\u003e"});
+            marker_3e1bbf6f15d765753d4d1c0ecdb5e2b4.setIcon(div_icon_b7e0064f8e83a7daae70b0f109740191);
+        
+    
+                var lat_lng_popup_485e9f31991f64876fb5c735a3b2171d = L.popup();
+                function latLngPop(e) {
+                    lat_lng_popup_485e9f31991f64876fb5c735a3b2171d
+                        .setLatLng(e.latlng)
+                        .setContent("Latitude: " + e.latlng.lat.toFixed(4) +
+                                    "<br>Longitude: " + e.latlng.lng.toFixed(4))
+                        .openOn(map_4ceb9dd0510b695a697493d8f396cbcf);
+                    }
+                map_4ceb9dd0510b695a697493d8f396cbcf.on('click', latLngPop);
+            
+    
+            L.control.fullscreen(
+                {"forceSeparateButton": true, "position": "topright", "title": "\u041f\u043e\u043b\u043d\u044b\u0439 \u044d\u043a\u0440\u0430\u043d", "titleCancel": "\u0417\u0430\u043a\u0440\u044b\u0442\u044c"}
+            ).addTo(map_4ceb9dd0510b695a697493d8f396cbcf);
+        
+</script>
+</html>

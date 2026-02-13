@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %}Загрузка маршрута{% endblock %}
+
+{% block content %}
+    <h2 style="text-align: center; margin-bottom: 30px;">📤 Выберите способ ввода данных</h2>
+
+    <!-- Кнопки выбора способа -->
+    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;">
+        <a href="{{ url_for('index') }}"
+           style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white;
+                  padding: 15px 30px;
+                  text-decoration: none;
+                  border-radius: 8px;
+                  font-size: 1.1em;
+                  font-weight: bold;
+                  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                  display: flex; align-items: center; gap: 10px;">
+            📤 CSV файл
+        </a>
+        <a href="{{ url_for('manual_input') }}"
+           style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                  color: white;
+                  padding: 15px 30px;
+                  text-decoration: none;
+                  border-radius: 8px;
+                  font-size: 1.1em;
+                  font-weight: bold;
+                  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+                  display: flex; align-items: center; gap: 10px;">
+            📝 Ручной ввод
+        </a>
+    </div>
+
+    <!-- CSV форма -->
+    <div style="max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 30px; border-radius: 10px;">
+
+        <div style="margin-bottom: 25px; text-align: center;">
+            <p style="color: #666; margin-bottom: 15px;">
+                <strong>📋 Формат CSV файла:</strong>
+            </p>
+            <pre style="background: white; padding: 15px; border-radius: 5px; text-align: left; font-size: 0.9em; border: 1px solid #ddd;">
+address,latitude,longitude
+"ул. Ленина, 1",55.7558,37.6173
+"Тверская ул., 13",55.7652,37.6010
+"Красная площадь",55.7539,37.6208</pre>
+            <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                • Минимум 2 точки для построения маршрута<br>
+                • Широта: от -90 до 90, Долгота: от -180 до 180
+            </p>
+        </div>
+
+        <form method="POST" action="{{ url_for('upload_file') }}" enctype="multipart/form-data">
+            <div style="margin-bottom: 20px;">
+                <label for="file" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                    Выберите CSV файл:
+                </label>
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept=".csv"
+                    required
+                    style="width: 100%; padding: 10px; border: 2px dashed #667eea; border-radius: 8px; cursor: pointer;"
+                >
+            </div>
+
+            <div style="text-align: center;">
+                <button
+                    type="submit"
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                           color: white;
+                           padding: 15px 40px;
+                           border: none;
+                           border-radius: 8px;
+                           font-size: 1.1em;
+                           cursor: pointer;
+                           transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.05)'"
+                    onmouseout="this.style.transform='scale(1)'"
+                >
+                    🚀 Рассчитать маршрут
+                </button>
+            </div>
+        </form>
+
+        <div style="margin-top: 30px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #667eea;">
+            <h4 style="margin-bottom: 10px; color: #667eea;">ℹ️ Как это работает:</h4>
+            <ol style="padding-left: 20px; color: #555;">
+                <li>Загрузите CSV файл со списком адресов и координатами</li>
+                <li>Система рассчитает оптимальный порядок объезда</li>
+                <li>Вы получите визуализацию маршрута на карте</li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}

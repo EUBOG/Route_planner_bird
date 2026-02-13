@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block title %}Результат маршрута{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h2>✅ Маршрут рассчитан</h2>
+        <a href="{{ url_for('index') }}"
+           style="background: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+           🔄 Новый маршрут
+        </a>
+    </div>
+
+    <!-- Статистика -->
+    <div style="background: #e7f3ff; border-left: 5px solid #2196F3; padding: 15px; margin-bottom: 25px; border-radius: 5px;">
+        <div style="display: flex; justify-content: space-around; text-align: center;">
+            <div>
+                <strong>Название:</strong><br>
+                <span style="font-size: 1.1em;">{{ route.name }}</span>
+            </div>
+            <div>
+                <strong>Точек:</strong><br>
+                <span style="font-size: 1.1em; color: #667eea; font-weight: bold;">{{ waypoints|length }}</span>
+            </div>
+            <div>
+                <strong>Дистанция:</strong><br>
+                <span style="font-size: 1.1em; color: #28a745; font-weight: bold;">{{ total_distance }} км</span>
+            </div>
+            <div>
+                <strong>Дата:</strong><br>
+                <span style="font-size: 0.9em; color: #666;">{{ route.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Список точек маршрута -->
+    <h3 style="margin-bottom: 15px;">📍 Порядок объезда:</h3>
+    <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
+        <ol style="padding: 0; margin: 0;">
+            {% for waypoint in waypoints %}
+                <li style="padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>{{ waypoint.address }}</strong><br>
+                        <small style="color: #666;">{{ "%.6f"|format(waypoint.latitude) }}, {{ "%.6f"|format(waypoint.longitude) }}</small>
+                    </div>
+                    <span style="background: #667eea; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em;">
+                        {{ loop.index }}
+                    </span>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    <!-- Карта маршрута -->
+    <h3 style="margin-bottom: 15px;">🗺️ Карта маршрута:</h3>
+    {% if map_url %}
+        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 0; margin-bottom: 20px;">
+            <iframe
+                src="{{ map_url }}"
+                width="100%"
+                height="600"
+                frameborder="0"
+                style="border: none; border-radius: 8px;"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="{{ map_url }}" target="_blank"
+               style="background: #28a745; color: white; padding: 10px 25px; text-decoration: none; border-radius: 5px; display: inline-block;">
+               🌐 Открыть карту в новом окне
+            </a>
+        </div>
+    {% else %}
+        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 40px; text-align: center;">
+            <p style="color: #dc3545; font-size: 1.1em;">
+                ⚠️ Карта не может быть отображена
+            </p>
+            <p style="color: #666; margin-top: 10px;">
+                Произошла ошибка при генерации карты. Попробуйте перезагрузить страницу.
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}
