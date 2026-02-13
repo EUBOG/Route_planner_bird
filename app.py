@@ -1,13 +1,27 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
 from models import db, Route, Waypoint
 from utils.csv_parser import parse_csv_file
 from utils.map_generator import create_route_map
 from algorithms.tsp_solver import solve_tsp
+# Добавляем импорт утилиты яндекса
+from utils.yandex_router import get_route_by_roads
+from dotenv import load_dotenv
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+# Загрузка переменных окружения
+load_dotenv()
+
+# Создание приложения
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+
+# Конфигурация
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///routes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -17,11 +31,64 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['MAP_FOLDER'], exist_ok=True)
 
+
+# Инициализация базы данных
+# db = SQLAlchemy(app)
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
 
+# Убеждаемся, что папка uploads существует
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+
+# Импорты утилит
+from utils.map_generator import create_route_map
+from utils.yandex_router import get_route_by_roads
+
+@app.route('/result/<int:route_id>/roads')
+def result_roads(route_id):
+    """Версия маршрута с расчётом по дорогам"""
+    route = Route.query.get_or_404(route_id)
+    waypoints = Waypoint.query.filter_by(route_id=route_id).order_by(Waypoint.order_index).all()
+
+    # Попытка построить маршрут по дорогам через Яндекс
+    use_yandex_roads = request.args.get('roads', '0') == '1'
+    yandex_route_data = None
+
+    if use_yandex_roads:
+        waypoints_data = [{
+            'latitude': wp.latitude,
+            'longitude': wp.longitude,
+            'address': wp.address
+        } for wp in waypoints]
+
+        yandex_route_data = get_route_by_roads(waypoints_data)
+
+        if yandex_route_data:
+            # Обновляем дистанцию в базе
+            route.total_distance = yandex_route_data['distance_km']
+            db.session.commit()
+
+    # Передаём yandex_route_data в create_route_map
+    map_obj = create_route_map(
+        waypoints,
+        route.name,
+        yandex_geometry=yandex_route_data['geometry'] if yandex_route_data else None
+    )
+
+    map_html = map_obj._repr_html_()
+
+    # Передаём данные в шаблон
+    return render_template(
+        'result.html',
+        route=route,
+        waypoints=waypoints,
+        map_html=map_html,
+        yandex_available=yandex_route_data is not None,
+        use_yandex_roads=use_yandex_roads
+    )
 
 @app.route('/')
 def index():
@@ -166,16 +233,57 @@ def manual_submit():
         return redirect(url_for('manual_input'))
 
 
+@app.route('/result/<int:route_id>/yandex')
+def result_yandex(route_id):
+    """Маршрут по дорогам через JavaScript API Яндекс.Карт"""
+    route = Route.query.get_or_404(route_id)
+    waypoints = Waypoint.query.filter_by(route_id=route_id).order_by(Waypoint.order_index).all()
+
+    # Получаем JavaScript API ключ из .env
+    yandex_api_key_js = os.getenv('YANDEX_API_KEY_JS')
+
+    return render_template(
+        'result_yandex.html',
+        route=route,
+        waypoints=waypoints,
+        YANDEX_API_KEY_JS=yandex_api_key_js
+    )
+
+
 @app.route('/result/<int:route_id>')
 def result(route_id):
     """Страница с результатом маршрута"""
     route = Route.query.get_or_404(route_id)
     waypoints = Waypoint.query.filter_by(route_id=route_id).order_by(Waypoint.order_index).all()
 
-    total_distance = route.calculate_total_distance()
+    use_yandex_roads = request.args.get('roads', '0') == '1'
+    yandex_route_data = None
+
+    if use_yandex_roads:
+        logger.info(f"Запрос маршрута по дорогам для route_id={route_id}")
+        waypoints_data = [{
+            'latitude': wp.latitude,
+            'longitude': wp.longitude,
+            'address': wp.address
+        } for wp in waypoints]
+
+        yandex_route_data = get_route_by_roads(waypoints_data)
+
+        if yandex_route_data:
+            logger.info(f"Маршрут по дорогам получен: {yandex_route_data['distance_km']} км")
+            route.total_distance = yandex_route_data['distance_km']
+            db.session.commit()
+        else:
+            logger.warning("Не удалось получить маршрут по дорогам от Яндекс")
+
+    total_distance = route.calculate_total_distance() if not yandex_route_data else yandex_route_data['distance_km']
 
     try:
-        map_obj = create_route_map(waypoints, route.name)
+        map_obj = create_route_map(
+            waypoints,
+            route.name,
+            yandex_geometry=yandex_route_data['geometry'] if yandex_route_data else None
+        )
 
         map_filename = f'route_{route_id}.html'
         map_path = os.path.join(app.config['MAP_FOLDER'], map_filename)
@@ -191,7 +299,9 @@ def result(route_id):
         route=route,
         waypoints=waypoints,
         total_distance=total_distance,
-        map_url=map_url
+        map_url=map_url,
+        yandex_available = yandex_route_data is not None,
+        use_yandex_roads = use_yandex_roads
     )
 
 

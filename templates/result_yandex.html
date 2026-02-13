@@ -1,29 +1,34 @@
 {% extends "layout.html" %}
 
-{% block title %}Результат маршрута{% endblock %}
+{% block title %}Маршрут по дорогам{% endblock %}
 
 {% block content %}
-    <!-- Переключатель ссылками -->
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .info-panel {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+
+    <!-- Переключатель режимов -->
     <div class="btn-group mb-3" role="group">
         <a href="{{ url_for('result', route_id=route.id) }}" class="btn btn-primary">
             📏 По прямой (птичий полёт)
-        </a>
-        <a href="{{ url_for('result_yandex', route_id=route.id) }}" class="btn btn-success">
-            🛣️ По дорогам (Яндекс)
-        </a>
-    </div>
-
-    <!-- Переключатель кнопками -->
-    <!--
-    <div class="btn-group mb-3" role="group">
-        <a href="{{ url_for('result', route_id=route.id) }}" class="btn btn-primary">
-            📏 По прямой
         </a>
         <a href="{{ url_for('result_yandex', route_id=route.id) }}" class="btn btn-success active">
             🛣️ По дорогам (Яндекс)
         </a>
     </div>
-    -->
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
         <h2>✅ Маршрут рассчитан</h2>
@@ -45,8 +50,8 @@
                 <span style="font-size: 1.1em; color: #667eea; font-weight: bold;">{{ waypoints|length }}</span>
             </div>
             <div>
-                <strong>Дистанция:</strong><br>
-                <span style="font-size: 1.1em; color: #28a745; font-weight: bold;">{{ total_distance }} км</span>
+                <strong>Режим:</strong><br>
+                <span style="font-size: 1.1em; color: #28a745; font-weight: bold;">По дорогам</span>
             </div>
             <div>
                 <strong>Дата:</strong><br>
@@ -73,56 +78,63 @@
         </ol>
     </div>
 
-    <!-- Информация о маршруте строчками-->
-    <!--
-        <div class="info-panel">
-            <h5>Точки маршрута:</h5>
-            <ol>
-                {% for wp in waypoints %}
-                <li>{{ wp.address }} ({{ wp.latitude }}, {{ wp.longitude }})</li>
-                {% endfor %}
-            </ol>
-        </div>
-    -->
+    <!-- Карта маршрута -->
+    <h3 style="margin-bottom: 15px;">🗺️ Карта маршрута:</h3>
+    <div id="map"></div>
 
-        <div id="map"></div>
-
-    <div class="info-panel" id="route-info" style="display: none;">
+    <!-- Информация о маршруте -->
+    <div class="info-panel" id="route-info" style="display: none; margin-top: 20px;">
         <h5>📊 Информация о маршруте:</h5>
         <p><strong>Расстояние:</strong> <span id="distance">—</span></p>
         <p><strong>Время в пути:</strong> <span id="duration">—</span></p>
         <p><strong>Количество точек:</strong> {{ waypoints|length }}</p>
     </div>
+{% endblock %}
 
+{% block scripts %}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey={{ YANDEX_API_KEY_JS }}&lang=ru_RU" type="text/javascript"></script>
+    <script type="text/javascript">
+        var waypoints = [
+            {% for wp in waypoints %}
+            [{{ wp.latitude }}, {{ wp.longitude }}],
+            {% endfor %}
+        ];
 
-    <!-- Карта маршрута -->
-    <h3 style="margin-bottom: 15px;">🗺️ Карта маршрута:</h3>
-    {% if map_url %}
-        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 0; margin-bottom: 20px;">
-            <iframe
-                src="{{ map_url }}"
-                width="100%"
-                height="600"
-                frameborder="0"
-                style="border: none; border-radius: 8px;"
-                allowfullscreen>
-            </iframe>
-        </div>
+        ymaps.ready(init);
 
-        <div style="text-align: center; margin-top: 15px;">
-            <a href="{{ map_url }}" target="_blank"
-               style="background: #28a745; color: white; padding: 10px 25px; text-decoration: none; border-radius: 5px; display: inline-block;">
-               🌐 Открыть карту в новом окне
-            </a>
-        </div>
-    {% else %}
-        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 40px; text-align: center;">
-            <p style="color: #dc3545; font-size: 1.1em;">
-                ⚠️ Карта не может быть отображена
-            </p>
-            <p style="color: #666; margin-top: 10px;">
-                Произошла ошибка при генерации карты. Попробуйте перезагрузить страницу.
-            </p>
-        </div>
-    {% endif %}
+        function init() {
+            var myMap = new ymaps.Map("map", {
+                center: waypoints[0],
+                zoom: 10
+            });
+
+            waypoints.forEach(function(point, index) {
+                var marker = new ymaps.Placemark(point, {
+                    balloonContent: 'Точка ' + (index + 1)
+                }, {
+                    preset: index === 0 ? 'islands#greenDotIcon' :
+                           index === waypoints.length - 1 ? 'islands#redDotIcon' :
+                           'islands#blueDotIcon'
+                });
+                myMap.geoObjects.add(marker);
+            });
+
+            ymaps.route(waypoints).then(function (route) {
+                myMap.geoObjects.add(route);
+                myMap.setBounds(route.getBounds(), { checkZoomRange: true });
+
+                var distance = route.getLength();
+                var time = route.getHumanJamsTime();
+
+                document.getElementById('distance').textContent = (distance / 1000).toFixed(2) + ' км';
+                document.getElementById('duration').textContent = time.text;
+                document.getElementById('route-info').style.display = 'block';
+
+                console.log('Маршрут построен успешно!');
+            }, function (error) {
+                console.error('Ошибка построения маршрута:', error);
+                alert('Не удалось построить маршрут по дорогам.');
+            });
+        }
+    </script>
 {% endblock %}
